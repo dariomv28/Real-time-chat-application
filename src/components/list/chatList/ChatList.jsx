@@ -101,7 +101,7 @@ const ChatList = () => {
                     <p>Hello</p>
                 </div>
             </div>
-            <AddNewUser/>
+            {addMode && <AddNewUser/>}
         </div>
     )
 }
