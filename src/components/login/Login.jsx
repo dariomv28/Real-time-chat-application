@@ -2,14 +2,17 @@ import { useState } from "react"
 import "./login.css"
 import { toast } from "react-toastify"
 import { createUserWithEmailAndPassword } from "firebase/auth"
-import { auth,db } from "../../lib/firebase"
+import { auth,db, storage } from "../../lib/firebase"
 import {doc, setDoc} from "firebase/firestore"
+//import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import upload from "../../lib/upload"
 const Login = () => {
     
     const [avatar, setAvatar] = useState({
         file: null, url: ""
     })
 
+    const [loading, setLoading] = useState(false)
     const handleAvatar = e => {
         if(e.target.files[0]) {
             setAvatar({
@@ -19,21 +22,34 @@ const Login = () => {
         }
     }
 
-    const handleLogin = e => {
+    const handleLogin = async(e) => {
         e.preventDefault()
-        toast.warn("Hello")
+        setLoading(true)
+        const formData = new FormData(e.target);
+        const {email, password} = Object.fromEntries(formData);
+
+        try {
+            await createUserWithEmailAndPassword(auth, email, password);
+        } catch(err) {
+
+        } finally {
+            setLoading(false)
+        }
     }
 
     const handleRegister = async (e) => {
         e.preventDefault();
+        setLoading(true)
         const formData = new FormData(e.target);
         const {username, email, password} = Object.fromEntries(formData);
 
         try {
             const res = await createUserWithEmailAndPassword(auth, email, password)
+            //const imgUrl = await upload(avatar.file)
             await setDoc(doc(db, "users", "res.user.uid"), {
                 username,
                 email,
+                //avatar: imgUrl,
                 id: res.user.uid,
                 blocked: [],
             });
@@ -44,6 +60,8 @@ const Login = () => {
         } catch(err) {
             console.log(err)    
             toast.error(err.message)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -56,7 +74,7 @@ const Login = () => {
                     <input type="text" placeholder="Email" name="email" />
                     <input type = "password" placeholder="Password" name="password"/>
                     <span>Forgot Password?</span>
-                    <button>Login</button>
+                    <button disabled = {loading}>{loading ? "Loading" : "Login"}</button>
                 </form>
             </div>
             <div className="item">
@@ -72,7 +90,7 @@ const Login = () => {
                         Your avatar
                     </label>
                     <input type="file" id="file" onChange={handleAvatar}/>
-                    <button>Sign Up</button>
+                    <button disabled = {loading}>{loading ? "Loading" : "Sign Up"}</button>
                 </form>
             </div>
         </div>
