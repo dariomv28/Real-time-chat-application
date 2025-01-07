@@ -88,6 +88,13 @@ body {
   color: white;
 }
 
+.loading {
+  padding: 50px;
+  font-size: 36px;
+  border-radius: 10px;
+  background-color: rgba(28, 41, 62, 0.333);
+}
+
 .container {
   width: 95vw;
   height: 95vh;
