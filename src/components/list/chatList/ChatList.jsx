@@ -7,8 +7,8 @@ import {doc, onSnapshot, getDoc} from "firebase/firestore";
 import { db } from "../../../lib/firebase";
 
 const ChatList = () => {
-    const {currentUser} = useUserStore();
     const [addMode, setAddMode] = useState(false);
+    const {currentUser} = useUserStore();
     const [chats, setChats] = useState([]);
 
     useEffect(() => {
@@ -19,7 +19,7 @@ const ChatList = () => {
 
                 const promises = items.map(async(item)=>{
                     const userDocRef = doc(db, "users", item.receiverId);
-                    const userDocSnap = await getDoc(docRef);
+                    const userDocSnap = await getDoc(userDocRef);
                     const user = userDocSnap.data();
                     return {...item, user};
                 });
@@ -49,16 +49,13 @@ const ChatList = () => {
 
             {chats.map((chat) => (
                 <div className="items" key = {chat.chatId}>
-                    <img src="./avatar.png" alt=""/>
+                    <img src={chat.user.avatar || "./avatar.png"} alt=""/>
                     <div className="texts">
-                        <span>Sarah</span>
+                        <span>{chat.user.username}</span>
                         <p>{chat.lastMessage}</p>
                     </div>
                 </div>
             ))}
-
-            
-            
             {addMode && <AddNewUser/>}
         </div>
     )
