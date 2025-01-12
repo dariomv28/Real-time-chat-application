@@ -149,6 +149,9 @@
                 &::placeholder {
                     color: rgba(255, 255, 255, 0.412);
                 }
+                &:disabled {
+                    cursor: not-allowed;
+                }
             }
     
             img {
@@ -183,6 +186,10 @@
     
             &:hover {
                 background-color:  rgba(28, 41, 62, 0.39);
+            }
+
+            &:disabled {
+                cursor: not-allowed;
             }
         }
     }
