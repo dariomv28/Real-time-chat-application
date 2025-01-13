@@ -7,7 +7,7 @@ import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/userStore";
 import { getDoc } from "firebase/firestore";
 
-const Chat = () => {
+const Chat = ({ setShowDetail }) => {
     const [chat, setChat] = useState();
     const [openEmoji, setOpenEmoji] = useState(false);
     const [text, setText] = useState("");
@@ -44,12 +44,17 @@ const Chat = () => {
                     });
                 }
             });
-
-            
+            setText("");
         } catch(err) {
             console.log(err);
         }
     };
+
+    const handleKeyPress = (e) => {
+        if(e.key === "Enter" && !isCurrentUserBlocked && !isReceiverBlocked) {
+            handleSend();
+        }
+    }
 
     useEffect(() => {
         endRef.current?.scrollIntoView({behavior: "smooth"});
@@ -74,13 +79,15 @@ const Chat = () => {
                     <img src={user?.avatar || "./avatar.png"} alt=""/>
                     <div className="texts">
                         <span>{user?.username}</span>
-                        <p>Lorem ipsum dolor sit amet.</p>
+                        {/* <p>Lorem ipsum dolor sit amet.</p> */}
                     </div>
                 </div>
                 <div className="icons">
                     <img src="./phone.png"/>
                     <img src="./video.png"/>
-                    <img src="./info.png"/>
+                    <img src="./info.png" 
+                        onClick={() => setShowDetail(prev => !prev)}
+                    />
                 </div>
             </div>
 
@@ -150,8 +157,15 @@ const Chat = () => {
                 </div>
 
                 <div className="messageInput">
-                  <input type="text" placeholder={(isCurrentUserBlocked || isReceiverBlocked) ? "You cannot send a message" : "Type a message..."} onChange={e => setText(e.target.value)} value={text} disabled = {isCurrentUserBlocked || isReceiverBlocked}/>
+
+                  <input type="text" placeholder={(isCurrentUserBlocked || isReceiverBlocked) ? "You cannot send a message" : "Type a message..."} 
+                  onChange={e => setText(e.target.value)} 
+                  value={text} 
+                  disabled = {isCurrentUserBlocked || isReceiverBlocked} 
+                  onKeyDown={handleKeyPress}/>
+
                   <img src="./emoji.png" alt="" onClick={() => setOpenEmoji(prev => !prev)}/>
+
                 </div>
                 <div className="emojiPicker">
                    <EmojiPicker open = {openEmoji} onEmojiClick={e => {

@@ -25,7 +25,7 @@ const Detail = () => {
             <div className="user">
                 <img src={user?.avatar || "./avatar.png"} alt="" />
                 <h2>{user?.username}</h2>
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>
+                {/* <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p> */}
             </div>
 
             <div className="info">
@@ -48,7 +48,7 @@ const Detail = () => {
                         <span>Shared Photos</span>
                         <img src="./arrowDown.png" alt="" />
                     </div>
-                    <div className="photos">
+                    {/* <div className="photos">
                         <div className="photoItem">
                             <div className="photoDetail">
                                 <img src="https://img.pikbest.com/origin/09/19/03/61zpIkbEsTGjk.jpg!w700wp" alt="" />
@@ -78,8 +78,8 @@ const Detail = () => {
                             <img src="./download.png" alt="" className="download"/>
                         </div>
                         
-                    </div>
-                </div>
+                    </div> */}
+                </div> 
 
                 <div className="option">
                     <div className="title">
@@ -91,7 +91,7 @@ const Detail = () => {
                     isCurrentUserBlocked? 
                     "You are blocked!"
                     : isReceiverBlocked ?
-                    "User blocked"
+                    "Unblock"
                     : "Block"
                 }</button>
             </div>

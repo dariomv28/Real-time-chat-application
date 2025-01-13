@@ -79,7 +79,9 @@ const ChatList = () => {
                     <img src={chat.user.avatar || "./avatar.png"} alt=""/>
                     <div className="texts">
                         <span>{chat.user.blocked.includes(currentUser.id)? "User" : chat.user.username}</span>
-                        <p>{chat.lastMessage}</p>
+                        <p>{chat.lastMessage.length > 15 ?
+                        chat.lastMessage.substring(0,15) + "..." : 
+                        chat.lastMessage}</p>
                     </div>
                 </div>
             ))}
